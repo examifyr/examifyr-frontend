@@ -26,13 +26,13 @@ if has_script "typecheck"; then
   ran_any=true
 fi
 
-if [ "${ran_any}" = false ]; then
-  if has_script "build"; then
-    echo "Running build..."
-    npm run build
-    exit 0
-  fi
+if has_script "build"; then
+  echo "Running build..."
+  npm run build
+  ran_any=true
+fi
 
+if [ "${ran_any}" = false ]; then
   echo "No test, lint, typecheck, or build script found."
   exit 1
 fi
