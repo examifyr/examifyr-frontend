@@ -22,6 +22,7 @@ export default function Home() {
     const [loadQuizId, setLoadQuizId] = useState<string>('');
     const [loadError, setLoadError] = useState<string | null>(null);
     const [copied, setCopied] = useState<boolean>(false);
+    const [copyError, setCopyError] = useState<string | null>(null);
 
     const resetQuizState = () => {
         setQuiz(null);
@@ -122,12 +123,26 @@ export default function Home() {
 
     const handleCopyQuizId = async () => {
         if (!quiz?.quiz_id) return;
+        setCopyError(null);
         try {
-            await navigator.clipboard.writeText(quiz.quiz_id);
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(quiz.quiz_id);
+            } else {
+                const textArea = document.createElement('textarea');
+                textArea.value = quiz.quiz_id;
+                textArea.setAttribute('readonly', '');
+                textArea.style.position = 'absolute';
+                textArea.style.left = '-9999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
             setCopied(true);
             setTimeout(() => setCopied(false), 1500);
         } catch {
             setCopied(false);
+            setCopyError('Unable to copy. Please select and copy the quiz id manually.');
         }
     };
 
@@ -216,6 +231,7 @@ export default function Home() {
                             {copied ? 'Copied' : 'Copy quiz id'}
                         </button>
                     </p>
+                    {copyError && <p style={{ color: 'crimson' }}>{copyError}</p>}
 
                     {quiz.questions.map((question, index) => {
                         const questionId = String(question.id);

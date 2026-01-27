@@ -10,14 +10,6 @@ export class ApiError extends Error {
     }
 }
 
-const getBaseUrl = (): string => {
-    const raw = process.env.NEXT_PUBLIC_API_BASE_URL;
-    if (!raw) {
-        throw new ApiError('Missing NEXT_PUBLIC_API_BASE_URL');
-    }
-    return raw.replace(/\/+$/, '');
-};
-
 const getErrorMessage = async (res: Response): Promise<string> => {
     try {
         const data: unknown = await res.json();
@@ -51,8 +43,7 @@ const requestJson = async <T>(
     path: string,
     options: { method?: 'GET' | 'POST'; body?: unknown } = {},
 ): Promise<T> => {
-    const baseUrl = getBaseUrl();
-    const res = await fetch(`${baseUrl}${path}`, {
+    const res = await fetch(path, {
         method: options.method ?? 'GET',
         headers: {
             'Content-Type': 'application/json',
