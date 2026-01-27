@@ -38,6 +38,7 @@ export default function Home() {
 
     const handleGenerate = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        if (loading) return;
         setError(null);
         setLoadError(null);
         setSubmitted(false);
@@ -72,6 +73,7 @@ export default function Home() {
     };
 
     const handleLoadById = async () => {
+        if (loading) return;
         setError(null);
         setLoadError(null);
         setSubmitted(false);
@@ -295,7 +297,13 @@ export default function Home() {
                                     <div style={{ marginTop: '10px' }}>
                                         <p>
                                             Result:{' '}
-                                            <strong style={{ color: isCorrect ? 'green' : 'crimson' }}>
+                                            <strong
+                                                className={
+                                                    isCorrect
+                                                        ? 'text-green-700 dark:text-green-400'
+                                                        : 'text-red-700 dark:text-red-400'
+                                                }
+                                            >
                                                 {isCorrect ? 'Correct' : 'Incorrect'}
                                             </strong>
                                         </p>
