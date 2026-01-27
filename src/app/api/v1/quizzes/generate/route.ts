@@ -1,17 +1,10 @@
 import { NextResponse } from 'next/server';
-
-const getBaseUrl = (): string => {
-    const raw = process.env.NEXT_PUBLIC_API_BASE_URL;
-    if (!raw) {
-        throw new Error('Missing NEXT_PUBLIC_API_BASE_URL');
-    }
-    return raw.replace(/\/+$/, '');
-};
+import { getBackendBaseUrl } from '@/lib/config';
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const baseUrl = getBaseUrl();
+        const baseUrl = getBackendBaseUrl();
         const res = await fetch(`${baseUrl}/api/v1/quizzes/generate`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

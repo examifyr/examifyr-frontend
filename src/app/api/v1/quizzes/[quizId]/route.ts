@@ -1,12 +1,5 @@
 import { NextResponse } from 'next/server';
-
-const getBaseUrl = (): string => {
-    const raw = process.env.NEXT_PUBLIC_API_BASE_URL;
-    if (!raw) {
-        throw new Error('Missing NEXT_PUBLIC_API_BASE_URL');
-    }
-    return raw.replace(/\/+$/, '');
-};
+import { getBackendBaseUrl } from '@/lib/config';
 
 export async function GET(
     _request: Request,
@@ -14,7 +7,7 @@ export async function GET(
 ) {
     try {
         const { quizId } = await context.params;
-        const baseUrl = getBaseUrl();
+        const baseUrl = getBackendBaseUrl();
         const res = await fetch(`${baseUrl}/api/v1/quizzes/${encodeURIComponent(quizId)}`);
 
         const text = await res.text();

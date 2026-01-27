@@ -12,28 +12,28 @@ export class ApiError extends Error {
 
 const getErrorMessage = async (res: Response): Promise<string> => {
     try {
-        const data: unknown = await res.json();
-        if (data && typeof data === 'object') {
-            const maybeMessage = (data as { message?: unknown }).message;
-            const maybeDetail = (data as { detail?: unknown }).detail;
-            if (typeof maybeMessage === 'string') {
-                return maybeMessage;
-            }
-            if (typeof maybeDetail === 'string') {
-                return maybeDetail;
-            }
-        }
-    } catch {
-        // ignore json parse errors
-    }
-
-    try {
         const text = await res.text();
         if (text) {
+            try {
+                const data: unknown = JSON.parse(text);
+                if (data && typeof data === 'object') {
+                    const maybeMessage = (data as { message?: unknown }).message;
+                    const maybeDetail = (data as { detail?: unknown }).detail;
+                    if (typeof maybeMessage === 'string') {
+                        return maybeMessage;
+                    }
+                    if (typeof maybeDetail === 'string') {
+                        return maybeDetail;
+                    }
+                }
+            } catch {
+                // ignore json parse errors
+            }
+
             return text;
         }
     } catch {
-        // ignore text parse errors
+        // ignore read errors
     }
 
     return `Request failed (${res.status})`;

@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { ApiError, generateQuiz, getQuizById } from '@/lib/api';
+import { calculateScore } from '@/lib/scoring';
 import type { Difficulty, GenerateQuizRequest, Quiz } from '@/lib/types';
 
 const clampNumQuestions = (value: number): number => {
@@ -13,6 +14,7 @@ export default function Home() {
     const [topic, setTopic] = useState<string>('');
     const [difficulty, setDifficulty] = useState<Difficulty>('easy');
     const [numQuestions, setNumQuestions] = useState<number>(5);
+    const [numQuestionsNote, setNumQuestionsNote] = useState<string | null>(null);
     const [quiz, setQuiz] = useState<Quiz | null>(null);
     const [answers, setAnswers] = useState<Record<string, number>>({});
     const [loading, setLoading] = useState<boolean>(false);
@@ -104,11 +106,7 @@ export default function Home() {
 
     const handleSubmit = () => {
         if (!quiz) return;
-        const total = quiz.questions.length;
-        const correct = quiz.questions.reduce((acc, question) => {
-            const key = String(question.id);
-            return acc + (answers[key] === question.answer_index ? 1 : 0);
-        }, 0);
+        const { correct, total } = calculateScore(quiz, answers);
         setScore({ correct, total });
         setSubmitted(true);
     };
@@ -188,9 +186,20 @@ export default function Home() {
                             min={1}
                             max={20}
                             value={numQuestions}
-                            onChange={(e) => setNumQuestions(clampNumQuestions(Number(e.target.value)))}
+                            onChange={(e) => {
+                                const raw = Number(e.target.value);
+                                const clamped = clampNumQuestions(raw);
+                                setNumQuestions(clamped);
+                                if (!Number.isNaN(raw) && raw !== clamped) {
+                                    setNumQuestionsNote('Number of questions must be between 1 and 20.');
+                                    setTimeout(() => setNumQuestionsNote(null), 2000);
+                                }
+                            }}
                             style={{ display: 'block', width: '100%', padding: '8px', marginTop: '6px' }}
                         />
+                        {numQuestionsNote && (
+                            <p style={{ marginTop: '6px', color: '#666' }}>{numQuestionsNote}</p>
+                        )}
                     </div>
 
                     <button type="submit" disabled={loading}>
@@ -238,8 +247,16 @@ export default function Home() {
                         const selected = answers[questionId];
                         const isCorrect = selected === question.answer_index;
                         const selectedLabel =
-                            selected !== undefined ? question.choices[selected] : 'No answer';
-                        const correctLabel = question.choices[question.answer_index] ?? 'Unknown';
+                            selected !== undefined &&
+                            selected >= 0 &&
+                            selected < question.choices.length
+                                ? question.choices[selected]
+                                : 'No answer';
+                        const correctLabel =
+                            question.answer_index >= 0 &&
+                            question.answer_index < question.choices.length
+                                ? question.choices[question.answer_index]
+                                : 'Unknown';
 
                         return (
                             <fieldset
