@@ -37,9 +37,17 @@ Create `.env.local` if you need to override defaults:
 NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
 ```
 
-`NEXT_PUBLIC_API_BASE_URL` must be the base host only (no `/api/v1` path). The frontend appends `/api/v1` internally (avoid double `/api/v1`) along with paths like `/version` and `/health`.
+`NEXT_PUBLIC_API_BASE_URL` must be the base host only (no `/api/v1` path). The frontend appends `/api/v1` internally when calling endpoints (avoid double `/api/v1`).
 
-Example generated URL: `http://127.0.0.1:8000/version`
+Example generated URL: `http://127.0.0.1:8000/api/v1/quizzes/generate`
+
+## Quick flow
+
+Generate → Answer → Submit → Score.
+
+## Quiz ID note
+
+The "Load by quiz id" feature uses in-memory backend storage. If the backend restarts, previously generated quiz IDs will no longer be found.
 
 ## Troubleshooting
 
