@@ -68,8 +68,11 @@ export const getQuizById = async (quizId: string): Promise<Quiz> => {
 };
 
 // DB-backed flows
-export const getQuestions = async (): Promise<Question[]> => {
-    return requestJson<Question[]>('/api/v1/questions');
+export const getQuestions = async (difficulty?: string): Promise<Question[]> => {
+    const path = difficulty
+        ? `/api/v1/questions?difficulty=${encodeURIComponent(difficulty)}`
+        : '/api/v1/questions';
+    return requestJson<Question[]>(path);
 };
 
 export const submitAttempt = async (payload: AttemptSubmitRequest): Promise<AttemptResult> => {

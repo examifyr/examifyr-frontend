@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server';
 import { getBackendBaseUrl } from '@/lib/config';
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
+        const { searchParams } = new URL(request.url);
+        const difficulty = searchParams.get('difficulty');
+
         const baseUrl = getBackendBaseUrl();
-        const res = await fetch(`${baseUrl}/api/v1/questions`, {
+        const backendUrl = new URL(`${baseUrl}/api/v1/questions`);
+        if (difficulty) backendUrl.searchParams.set('difficulty', difficulty);
+
+        const res = await fetch(backendUrl.toString(), {
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store',
         });
