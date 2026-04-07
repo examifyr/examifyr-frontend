@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export interface SubjectPageConfig {
@@ -28,13 +29,13 @@ export default function SubjectLandingPage({ config }: { config: SubjectPageConf
         <div style={{ minHeight: '100vh', background: '#fff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', color: '#0f172a' }}>
             {/* Nav */}
             <nav style={{ borderBottom: '1px solid #f1f5f9', padding: '0 32px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, background: '#fff', zIndex: 50 }}>
-                <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+                <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
                     <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
                         <rect width="32" height="32" rx="8" fill="#2563eb"/>
                         <path d="M8 17l5 5 11-11" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#0f172a', letterSpacing: '-0.03em' }}>examifyr</span>
-                </a>
+                </Link>
                 <button
                     onClick={() => handleStart('hard')}
                     style={{ background: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', padding: '9px 20px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}
@@ -155,9 +156,9 @@ export default function SubjectLandingPage({ config }: { config: SubjectPageConf
                 </div>
                 <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
                     {config.relatedLinks.map(({ label, href }) => (
-                        <a key={href} href={href} style={{ fontSize: '13px', color: '#64748b', textDecoration: 'none' }}>{label}</a>
+                        <Link key={href} href={href} style={{ fontSize: '13px', color: '#64748b', textDecoration: 'none' }}>{label}</Link>
                     ))}
-                    <a href="/" style={{ fontSize: '13px', color: '#64748b', textDecoration: 'none' }}>All subjects</a>
+                    <Link href="/" style={{ fontSize: '13px', color: '#64748b', textDecoration: 'none' }}>All subjects</Link>
                 </div>
                 <p style={{ fontSize: '12px', color: '#94a3b8' }}>© 2026 Examifyr</p>
             </footer>

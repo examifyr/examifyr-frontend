@@ -102,29 +102,8 @@ export default function Home() {
     const [result, setResult] = useState<AttemptResult | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // Fetch subjects + handle ?autostart=1 from subject landing pages
-    useEffect(() => {
-        getSubjects()
-            .then(setSubjects)
-            .catch(() => {/* use fallback below */});
-
-        // Auto-start if redirected from a subject landing page
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('autostart') === '1') {
-            const savedSubject = sessionStorage.getItem('examifyr_subject');
-            const savedDifficulty = sessionStorage.getItem('examifyr_difficulty') as Difficulty | null;
-            sessionStorage.removeItem('examifyr_subject');
-            sessionStorage.removeItem('examifyr_difficulty');
-            if (savedSubject && savedDifficulty) {
-                setSubject(savedSubject);
-                // Remove query param without reload
-                window.history.replaceState({}, '', '/');
-                handleStartWithArgs(savedSubject, savedDifficulty);
-            }
-        }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
     const handleStartWithArgs = async (subj: string, diff: Difficulty) => {
+        setSubject(subj);
         setDifficulty(diff);
         setError(null);
         setState('loading');
@@ -140,6 +119,27 @@ export default function Home() {
             setState('idle');
         }
     };
+
+    // Fetch subjects + handle ?autostart=1 from subject landing pages
+    useEffect(() => {
+        getSubjects()
+            .then(setSubjects)
+            .catch(() => {/* use fallback below */});
+
+        // Auto-start if redirected from a subject landing page
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('autostart') === '1') {
+            const savedSubject = sessionStorage.getItem('examifyr_subject');
+            const savedDifficulty = sessionStorage.getItem('examifyr_difficulty') as Difficulty | null;
+            sessionStorage.removeItem('examifyr_subject');
+            sessionStorage.removeItem('examifyr_difficulty');
+            if (savedSubject && savedDifficulty) {
+                window.history.replaceState({}, '', '/');
+                handleStartWithArgs(savedSubject, savedDifficulty);
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const totalCount = questions.length;
     const currentQ = questions[currentIndex];
