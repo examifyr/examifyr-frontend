@@ -138,7 +138,7 @@ export default function Home() {
         );
 
         return (
-            <main style={{ padding: '40px', maxWidth: '720px', margin: '0 auto' }}>
+            <main style={{ padding: '40px', maxWidth: '720px', margin: '0 auto', color: '#111827' }}>
                 {/* Score card */}
                 <div style={{
                     textAlign: 'center',
@@ -228,6 +228,7 @@ export default function Home() {
                     borderRadius: '12px',
                     padding: '24px',
                     marginBottom: '24px',
+                    color: '#111827',
                 }}>
                     <h2 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '6px' }}>
                         Want a full study plan?
@@ -285,7 +286,7 @@ export default function Home() {
 
     // ── Quiz ──────────────────────────────────────────────────────────────────
     return (
-        <main style={{ maxWidth: '720px', margin: '0 auto', paddingBottom: '60px' }}>
+        <main style={{ maxWidth: '720px', margin: '0 auto', paddingBottom: '60px', color: '#111827' }}>
             {/* Sticky progress bar */}
             <div style={{
                 position: 'sticky',
@@ -297,6 +298,7 @@ export default function Home() {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 zIndex: 10,
+                color: '#111827',
             }}>
                 <span style={{ fontWeight: 600, fontSize: '0.95rem' }}>Python Readiness Test</span>
                 <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
