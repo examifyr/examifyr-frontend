@@ -102,11 +102,43 @@ export default function Home() {
     const [result, setResult] = useState<AttemptResult | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // Fetch subjects once on mount
+    const handleStartWithArgs = async (subj: string, diff: Difficulty) => {
+        setSubject(subj);
+        setDifficulty(diff);
+        setError(null);
+        setState('loading');
+        try {
+            const qs = await getQuestions(subj, diff);
+            setQuestions(qs);
+            setAnswers({});
+            setRevealed(new Set());
+            setCurrentIndex(0);
+            setState('quiz');
+        } catch (err) {
+            setError(err instanceof ApiError ? err.message : 'Failed to load. Please try again.');
+            setState('idle');
+        }
+    };
+
+    // Fetch subjects + handle ?autostart=1 from subject landing pages
     useEffect(() => {
         getSubjects()
             .then(setSubjects)
             .catch(() => {/* use fallback below */});
+
+        // Auto-start if redirected from a subject landing page
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('autostart') === '1') {
+            const savedSubject = sessionStorage.getItem('examifyr_subject');
+            const savedDifficulty = sessionStorage.getItem('examifyr_difficulty') as Difficulty | null;
+            sessionStorage.removeItem('examifyr_subject');
+            sessionStorage.removeItem('examifyr_difficulty');
+            if (savedSubject && savedDifficulty) {
+                window.history.replaceState({}, '', '/');
+                handleStartWithArgs(savedSubject, savedDifficulty);
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const totalCount = questions.length;
@@ -122,20 +154,7 @@ export default function Home() {
     };
 
     const handleStart = async (diff: Difficulty) => {
-        setDifficulty(diff);
-        setError(null);
-        setState('loading');
-        try {
-            const qs = await getQuestions(subject ?? undefined, diff);
-            setQuestions(qs);
-            setAnswers({});
-            setRevealed(new Set());
-            setCurrentIndex(0);
-            setState('quiz');
-        } catch (err) {
-            setError(err instanceof ApiError ? err.message : 'Failed to load. Please try again.');
-            setState('picking-difficulty');
-        }
+        await handleStartWithArgs(subject ?? 'Python', diff);
     };
 
     const handleSelectAnswer = (qId: number, choiceIndex: number) => {
