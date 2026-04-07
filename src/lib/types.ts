@@ -25,6 +25,7 @@ export interface GenerateQuizRequest {
 // DB-backed question
 export interface Question {
     id: number;
+    subject: string;
     topic: string;
     difficulty: Difficulty;
     points: number;
@@ -32,6 +33,14 @@ export interface Question {
     choices: string[];
     answer_index: number;
     explanation: string;
+}
+
+export interface SubjectMeta {
+    subject: string;
+    display_name: string;
+    description: string;
+    total_questions: number;
+    status: 'live' | 'coming_soon';
 }
 
 // Attempt submission
