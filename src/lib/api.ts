@@ -4,6 +4,7 @@ import type {
     GenerateQuizRequest,
     Question,
     Quiz,
+    SubjectMeta,
 } from './types';
 
 export class ApiError extends Error {
@@ -68,11 +69,16 @@ export const getQuizById = async (quizId: string): Promise<Quiz> => {
 };
 
 // DB-backed flows
-export const getQuestions = async (difficulty?: string): Promise<Question[]> => {
-    const path = difficulty
-        ? `/api/v1/questions?difficulty=${encodeURIComponent(difficulty)}`
-        : '/api/v1/questions';
-    return requestJson<Question[]>(path);
+export const getSubjects = async (): Promise<SubjectMeta[]> => {
+    return requestJson<SubjectMeta[]>('/api/v1/questions/subjects');
+};
+
+export const getQuestions = async (subject?: string, difficulty?: string): Promise<Question[]> => {
+    const params = new URLSearchParams();
+    if (subject) params.set('subject', subject);
+    if (difficulty) params.set('difficulty', difficulty);
+    const qs = params.toString();
+    return requestJson<Question[]>(qs ? `/api/v1/questions?${qs}` : '/api/v1/questions');
 };
 
 export const submitAttempt = async (payload: AttemptSubmitRequest): Promise<AttemptResult> => {

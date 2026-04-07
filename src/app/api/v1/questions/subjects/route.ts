@@ -1,18 +1,10 @@
 import { NextResponse } from 'next/server';
 import { getBackendBaseUrl } from '@/lib/config';
 
-export async function GET(request: Request) {
+export async function GET() {
     try {
-        const { searchParams } = new URL(request.url);
-        const difficulty = searchParams.get('difficulty');
-        const subject = searchParams.get('subject');
-
         const baseUrl = getBackendBaseUrl();
-        const backendUrl = new URL(`${baseUrl}/api/v1/questions`);
-        if (difficulty) backendUrl.searchParams.set('difficulty', difficulty);
-        if (subject) backendUrl.searchParams.set('subject', subject);
-
-        const res = await fetch(backendUrl.toString(), {
+        const res = await fetch(`${baseUrl}/api/v1/questions/subjects`, {
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store',
         });
@@ -25,7 +17,7 @@ export async function GET(request: Request) {
             return new Response(text, { status: res.status });
         }
     } catch (err) {
-        const message = err instanceof Error ? err.message : 'Failed to fetch questions.';
+        const message = err instanceof Error ? err.message : 'Failed to fetch subjects.';
         return NextResponse.json({ message }, { status: 500 });
     }
 }
