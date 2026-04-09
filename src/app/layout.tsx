@@ -38,21 +38,12 @@ export const metadata: Metadata = {
     title: "Free Coding Readiness Tests — Know If You're Ready | Examifyr",
     description:
       "Instant readiness score, weak-area diagnosis, and pass likelihood — free, no sign-up. Python, JavaScript, SQL, HTML & CSS.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Examifyr — Free Coding Readiness Tests",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Free Coding Readiness Tests | Examifyr",
     description:
       "Take a free Python, JavaScript, SQL, or HTML & CSS readiness test. Instant score + weak-area breakdown.",
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,
