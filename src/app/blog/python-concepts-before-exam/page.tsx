@@ -82,7 +82,7 @@ bool(None)     # False
 
 # This trips people up:
 bool([0])      # True — non-empty list`}</pre>
-            <p><strong>What to know:</strong> Any non-empty container is truthy, even if its contents are falsy. <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', fontSize: '0.875rem' }}>[0]</code>, <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', fontSize: '0.875rem' }}>{'{0}'}</code>, and <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', fontSize: '0.875rem' }}>"0"</code> are all truthy.</p>
+            <p><strong>What to know:</strong> Any non-empty container is truthy, even if its contents are falsy. <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', fontSize: '0.875rem' }}>[0]</code>, <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', fontSize: '0.875rem' }}>{'{0}'}</code>, and <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', fontSize: '0.875rem' }}>&#34;0&#34;</code> are all truthy.</p>
 
             <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: '#0f172a', marginTop: '40px', marginBottom: '12px', letterSpacing: '-0.02em' }}>How to know if you&apos;ve actually got these down</h2>
             <p>Reading about a concept feels different from being tested on it under exam conditions. The best way to find out where your real gaps are is to take a timed, scored practice test — one that shows you topic-by-topic where you&apos;re strong and where you&apos;re not.</p>
